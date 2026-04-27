@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA no Tesouro e Gestão Fiscal | INSTITUTO SABER DIGITAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --gold-light: #C9A24A;
+            --gold-main: #D4AF37;
+            --gold-dark: #B8962E;
+            --gold-deep: #8a6d2b; 
+            --blue-deep: #0F1C2E;
+            --blue-dark: #1A2A40;
+            --text-black: #1A1A1A;
+            --text-gray: #333333;
+            --ocre-soft: #fdfaf1;
+            --ocre-medium: #f9f1d8;
+            --urgency-red: #dc2626;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--ocre-soft);
+            color: var(--text-black);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Barra de Cronômetro Fixa */
+        .timer-bar {
+            background-color: var(--blue-deep);
+            color: #ffffff;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 130;
+            border-bottom: 2px solid var(--gold-main);
+        }
+
+        .timer-unit {
+            background: #ffffff;
+            color: var(--blue-deep);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin: 0 4px;
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        /* Header Flutuante */
+        .glass-header {
+            background: #ffffff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 50px;
+            width: 100%;
+            z-index: 120;
+        }
+
+        /* Banner Parallax Otimizado para aparecer por completo */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            min-height: 90vh; /* Aumentado para garantir visualização total do banner */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-top: 130px;
+        }
+
+        .hero-background-fixed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('images/banner_principal_sefaz_ia.png');
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain; /* Mudado para contain para garantir que as mensagens de rodapé apareçam */
+            background-color: var(--ocre-soft);
+            z-index: -1;
+        }
+
+        /* Botão Vermelho de Conversão */
+        .btn-urgent-red {
+            background-color: var(--urgency-red);
+            color: #ffffff !important;
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-urgent-red:hover {
+            background-color: #b91c1c;
+            transform: scale(1.03);
+        }
+
+        .btn-gold {
+            background-color: var(--gold-main);
+            color: var(--blue-deep) !important;
+            transition: all 0.2s ease;
+        }
+
+        /* Seções Coloridas */
+        .section-ocre-soft { background-color: var(--ocre-soft); }
+        .section-ocre-medium { background-color: var(--ocre-medium); }
+        .bg-footer-yoshida { background-color: var(--blue-deep) !important; }
+
+        .dynamic-title { color: var(--gold-deep); font-weight: 800; }
+        .dynamic-text { color: var(--blue-deep); font-weight: 600; }
+        
+        .separator-line {
+            width: 1px;
+            height: 100px;
+            background-color: var(--gold-main);
+            opacity: 0.5;
+        }
+
+        .dominance-card {
+            background: #ffffff;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .credential-tag {
+            background: #ffffff;
+            border: 1px solid var(--gold-main);
+            color: var(--blue-deep);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .content-wrapper {
+            position: relative;
+            background: white;
+            z-index: 10;
+        }
+
+        /* Texto Chapado */
+        h1, h2, h3, h4, p, span, li, a {
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            color: var(--blue-deep);
+            opacity: 1 !important;
+        }
+        .text-white-solid { color: #ffffff !important; }
+        .text-gold-solid { color: var(--gold-main) !important; }
+        .text-gray-solid { color: var(--text-gray) !important; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Cronômetro -->
+    <div class="timer-bar">
+        <div class="flex items-center">
+            <i class="fa-solid fa-clock mr-3 text-gold-main"></i>
+            <span class="hidden sm:inline text-white-solid">Aproveite esta oportunidade única. A oferta expira em:</span>
+            <div class="flex items-center ml-4">
+                <span id="h-unit" class="timer-unit">00</span><span class="text-[10px] ml-1 text-white-solid">h</span>
+                <span id="m-unit" class="timer-unit">15</span><span class="text-[10px] ml-1 text-white-solid">min</span>
+                <span id="s-unit" class="timer-unit">00</span><span class="text-[10px] ml-1 text-white-solid">seg</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegação -->
+    <nav class="glass-header">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="images/logo_saber_digital.png" alt="Instituto Saber Digital" class="h-10 w-auto object-contain">
+                <div class="hidden lg:block h-8 w-[1px] bg-slate-200 ml-2"></div>
+                <div class="hidden lg:flex flex-col text-blue-deep">
+                    <span class="text-[8px] font-black uppercase tracking-[0.3em] mb-1 leading-none">Instituto</span>
+                    <span class="text-lg font-black tracking-tighter uppercase leading-none italic font-bold">Saber<span class="text-gold-main">Digital</span></span>
+                </div>
+            </div>
+            <div class="hidden md:flex space-x-8 text-[10px] font-bold uppercase tracking-widest">
+                <a href="#cronograma" class="hover:text-gold-main transition">Dinâmica</a>
+                <a href="#metodologia" class="hover:text-gold-main transition">Métodos</a>
+                <a href="#aprendizado" class="hover:text-gold-main transition">Domínio</a>
+                <a href="#especialista" class="hover:text-gold-main transition">Especialista</a>
+            </div>
+            <a href="#inscricao" class="btn-urgent-red px-10 py-3 rounded-full font-bold text-sm shadow-lg uppercase tracking-wider">
+                Reservar Vaga
+            </a>
+        </div>
+    </nav>
+
+    <!-- Seção Hero (Banner Totalmente Visível) -->
+    <section class="hero-section">
+        <div class="hero-background-fixed"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10 text-center w-full">
+            <div class="pt-[45vh] md:pt-[55vh]">
+                <a href="#inscricao" class="btn-gold px-14 py-6 rounded-2xl font-black text-2xl uppercase tracking-widest shadow-2xl inline-block hover:scale-105 transition-transform border-b-4 border-gold-dark">
+                    Garantir inscrição agora
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="content-wrapper">
+        <!-- Dinâmica da Formação -->
+        <section id="cronograma" class="py-24 bg-white border-b border-gold-main/10">
+            <div class="max-w-7xl mx-auto px-6 text-center">
+                <h2 class="text-3xl lg:text-4xl font-black text-blue-deep mb-4 uppercase tracking-tighter italic">Dinâmica da Formação</h2>
+                <div class="h-1.5 w-20 bg-gold-main mx-auto rounded-full mb-16 shadow-sm"></div>
+                
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0">
+                    <div class="flex-1 px-8">
+                        <span class="text-6xl font-black text-slate-200 block mb-6">28</span>
+                        <h3 class="dynamic-title text-xl mb-4 uppercase">Fundamentos IAG</h3>
+                        <p class="text-blue-deep text-sm font-bold italic mb-4">4 Horas • Online</p>
+                        <p class="text-blue-deep text-xs leading-relaxed font-medium">Masterclass estratégica focada no ecossistema Gemini e automação básica.</p>
+                    </div>
+
+                    <div class="hidden lg:block separator-line"></div>
+
+                    <div class="flex-1 px-8 py-12 bg-white rounded-[2rem] border-2 border-gold-main shadow-xl relative transform lg:scale-110 z-10">
+                        <span class="text-6xl font-black text-gold-main/20 block mb-6 leading-none">29</span>
+                        <h3 class="dynamic-title text-xl mb-4 uppercase">Arrecadação e Fiscal</h3>
+                        <p class="text-blue-deep text-sm font-bold mb-4 uppercase">8 Horas • Presencial</p>
+                        <p class="text-blue-deep text-xs leading-relaxed italic mb-6">Intervalo Almoço: 12h às 14h</p>
+                        <div class="flex justify-between text-[10px] font-black uppercase text-gold-deep border-t border-gold-main/20 pt-4">
+                            <span>08h - 12h</span><span>14h - 18h</span>
+                        </div>
+                    </div>
+
+                    <div class="hidden lg:block separator-line"></div>
+
+                    <div class="flex-1 px-8">
+                        <span class="text-6xl font-black text-slate-200 block mb-6">30</span>
+                        <h3 class="dynamic-title text-xl mb-4 uppercase">Tesouro e Conta Única</h3>
+                        <p class="text-blue-deep text-sm font-bold italic mb-4 uppercase">8 Horas • Presencial</p>
+                        <p class="text-blue-deep text-xs leading-relaxed font-medium">Equilíbrio financeiro e gestão contábil com inteligência preditiva.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- O que você vai dominar -->
+        <section id="aprendizado" class="py-24 section-ocre-soft">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-20">
+                    <h2 class="text-3xl lg:text-5xl font-black text-blue-deep mb-6 uppercase tracking-tighter">O que você vai dominar</h2>
+                    <p class="text-gold-deep font-bold uppercase text-xs tracking-[0.3em]">Eficiência Técnica para a Área Fazendária</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="dominance-card p-10 rounded-[2.5rem] flex flex-col h-full shadow-sm">
+                        <div class="w-16 h-16 bg-blue-deep rounded-2xl flex items-center justify-center text-gold-main text-3xl mb-8">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <h4 class="text-blue-deep font-black uppercase text-sm mb-4 border-b-2 border-gold-main w-fit pb-1">IA na Prática</h4>
+                        <p class="text-sm text-blue-deep leading-relaxed font-medium">Ferramentas como <span class="font-bold">Gemini e NotebookLM</span> aplicadas a demandas reais.</p>
+                    </div>
+                    <div class="dominance-card p-10 rounded-[2.5rem] flex flex-col h-full shadow-sm">
+                        <div class="w-16 h-16 bg-blue-deep rounded-2xl flex items-center justify-center text-gold-main text-3xl mb-8">
+                            <i class="fa-solid fa-file-signature"></i>
+                        </div>
+                        <h4 class="text-blue-deep font-black uppercase text-sm mb-4 border-b-2 border-gold-main w-fit pb-1">Redação Técnica</h4>
+                        <p class="text-sm text-blue-deep leading-relaxed font-medium">Produção de <span class="font-bold uppercase text-blue-deep">notas e pareceres</span> com agilidade absoluta.</p>
+                    </div>
+                    <div class="dominance-card p-10 rounded-[2.5rem] flex flex-col h-full shadow-sm">
+                        <div class="w-16 h-16 bg-blue-deep rounded-2xl flex items-center justify-center text-gold-main text-3xl mb-8">
+                            <i class="fa-solid fa-bolt-lightning"></i>
+                        </div>
+                        <h4 class="text-blue-deep font-black uppercase text-sm mb-4 border-b-2 border-gold-main w-fit pb-1">Automação</h4>
+                        <p class="text-sm text-blue-deep leading-relaxed font-medium">Eliminação de <span class="font-bold uppercase text-blue-deep">tarefas repetitivas</span> para foco estratégico.</p>
+                    </div>
+                    <div class="dominance-card p-10 rounded-[2.5rem] flex flex-col h-full shadow-sm">
+                        <div class="w-16 h-16 bg-blue-deep rounded-2xl flex items-center justify-center text-gold-main text-3xl mb-8">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h4 class="text-blue-deep font-black uppercase text-sm mb-4 border-b-2 border-gold-main w-fit pb-1">Data Insights</h4>
+                        <p class="text-sm text-blue-deep leading-relaxed font-medium">Extração de inteligência de <span class="font-bold uppercase text-blue-deep">dados financeiros</span> instantaneamente.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Métodos e Estratégias (Atualizado conforme imagem image_aa8235.png) -->
+        <section id="metodologia" class="py-24 bg-white border-y border-gold-main/10">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl lg:text-4xl font-black text-blue-deep mb-4 uppercase tracking-tighter">Métodos e Estratégias</h2>
+                    <div class="h-1 w-20 bg-gold-main mx-auto mb-4"></div>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-10 text-left">
+                    <!-- 1 -->
+                    <div class="p-8 bg-off-white rounded-3xl border-t-4 border-gold-main shadow-md">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 bg-gold-main rounded-full flex items-center justify-center text-blue-deep"><i class="fa-solid fa-chevron-right text-xs"></i></div>
+                            <h4 class="text-blue-deep font-black uppercase text-[12px] tracking-widest">Introdução à IA Generativa</h4>
+                        </div>
+                        <p class="text-sm text-blue-deep leading-relaxed font-medium">Palestra sobre IA Generativa (IAG), detalhando o ecossistema Google Gemini e NotebookLM aplicados à gestão fazendária. Foco na democratização da informação técnica e no suporte especializado ao corpo técnico do Tesouro.</p>
+                    </div>
+                    <!-- 2 -->
+                    <div class="p-8 bg-off-white rounded-3xl border-t-4 border-gold-main shadow-md">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 bg-gold-main rounded-full flex items-center justify-center text-blue-deep"><i class="fa-solid fa-chevron-right text-xs"></i></div>
+                            <h4 class="text-blue-deep font-black uppercase text-[12px] tracking-widest">Transparência e Comunicação Institucional</h4>
+                        </div>
+                        <p class="text-sm text-blue-deep leading-relaxed font-medium">Uso da IA para redação de notas explicativas, comunicados aos órgãos de controle e tradução de normas complexas para linguagem acessível. Desenvolvimento de assistentes internos para suporte imediato às dúvidas sobre procedimentos do Tesouro.</p>
+                    </div>
+                    <!-- 3 -->
+                    <div class="p-8 bg-off-white rounded-3xl border-t-4 border-gold-main shadow-md">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 bg-gold-main rounded-full flex items-center justify-center text-blue-deep"><i class="fa-solid fa-chevron-right text-xs"></i></div>
+                            <h4 class="text-blue-deep font-black uppercase text-[12px] tracking-widest">Aplicações na Gestão Fazendária</h4>
+                        </div>
+                        <p class="text-sm text-blue-deep leading-relaxed font-medium">Demonstração prática da IA no cotidiano da SEFAZ: elaboração de pareceres técnicos, resumos de processos judiciais e análise de conformidade. Automatização de rotinas repetitivas na execução de processos administrativos e fiscais.</p>
+                    </div>
+                    <!-- 4 -->
+                    <div class="p-8 bg-off-white rounded-3xl border-t-4 border-gold-main shadow-md">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 bg-gold-main rounded-full flex items-center justify-center text-blue-deep"><i class="fa-solid fa-chevron-right text-xs"></i></div>
+                            <h4 class="text-blue-deep font-black uppercase text-[12px] tracking-widest">Casos Uso NotebookLM</h4>
+                        </div>
+                        <p class="text-sm text-blue-deep leading-relaxed font-medium">Organização de acervos de legislação estadual, decretos financeiros e manuais bancários em "cadernos inteligentes". Consultas dinâmicas a grandes volumes de dados não estruturados (PDFs) para extração de impacto financeiro.</p>
+                    </div>
+                    <!-- 5 -->
+                    <div class="p-8 bg-off-white rounded-3xl border-t-4 border-gold-main shadow-md">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 bg-gold-main rounded-full flex items-center justify-center text-blue-deep"><i class="fa-solid fa-chevron-right text-xs"></i></div>
+                            <h4 class="text-blue-deep font-black uppercase text-[12px] tracking-widest">Benefícios Estratégicos e Operacionais</h4>
+                        </div>
+                        <p class="text-sm text-blue-deep leading-relaxed font-medium">Auxílio na redação de relatórios de gestão fiscal e organização de agendas de programação financeira. Criação de dashboards inteligentes e apoio na identificação proativa de inconsistências e anomalias de caixa.</p>
+                    </div>
+                    <!-- 6 -->
+                    <div class="p-8 bg-off-white rounded-3xl border-t-4 border-gold-main shadow-md">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 bg-gold-main rounded-full flex items-center justify-center text-blue-deep"><i class="fa-solid fa-chevron-right text-xs"></i></div>
+                            <h4 class="text-blue-deep font-black uppercase text-[12px] tracking-widest">Ética, Segurança e Limites da IA</h4>
+                        </div>
+                        <p class="text-sm text-blue-deep leading-relaxed font-medium">A IA atua como apoio, não substituindo o julgamento técnico dos analistas e auditores do Tesouro. O workshop enfatiza a necessidade de validação humana, segurança de dados sensíveis e governança para garantir a integridade do erário.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Condução Técnica -->
+        <section id="especialista" class="py-24 section-ocre-medium">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    <div class="lg:w-2/5">
+                        <div class="relative">
+                            <div class="absolute -inset-4 bg-gold-main/10 rounded-full blur-3xl"></div>
+                            <img src="images/Benedito_Palheta_2026.jpg" alt="Prof. Me. Benedito Palheta" class="relative rounded-2xl shadow-xl w-full object-cover aspect-[4/5] grayscale hover:grayscale-0 transition duration-1000 border border-gold-main/20">
+                        </div>
+                    </div>
+                    <div class="lg:w-3/5">
+                        <span class="text-gold-deep font-bold uppercase tracking-[0.4em] text-[10px] mb-4 block">Condução Técnica Especializada</span>
+                        <h2 class="text-2xl font-black text-blue-deep mb-2 uppercase tracking-tight italic">Prof. Me. Benedito Palheta</h2>
+                        <p class="text-gold-main font-bold text-xs uppercase tracking-widest mb-8 border-b border-gold-main/40 pb-4 inline-block italic">Especialista em Inteligência Artificial</p>
+                        
+                        <p class="text-blue-deep text-lg leading-relaxed mb-10 font-medium italic">
+                            Mestre em Gestão de Políticas Públicas (UFT). Servidor com mais de 25 anos em TI no setor público, com trabalho mencionado pela **ONU** como referência na América Latina. Criador da plataforma **Lexius**.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-4">
+                            <div class="credential-tag shadow-sm">Cibersegurança</div>
+                            <div class="credential-tag shadow-sm">Ciência de Dados</div>
+                            <div class="credential-tag shadow-sm">Proteção de Dados</div>
+                            <div class="credential-tag shadow-sm">Professor Mestre</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inscrição -->
+        <section id="inscricao" class="py-24 bg-white">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <h2 class="text-4xl font-black mb-14 tracking-tighter uppercase italic text-blue-deep leading-tight">Reserva de Participação</h2>
+                <div id="form-container" class="bg-white p-10 md:p-14 rounded-[3.5rem] shadow-2xl text-left border border-gold-main/20 border-t-[10px] border-t-gold-main">
+                    <form id="registrationForm" class="space-y-8">
+                        <div class="grid md:grid-cols-2 gap-8 font-bold text-blue-deep">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest ml-4">Nome Completo</label>
+                                <input type="text" id="input_name" required placeholder="Digite seu nome" class="w-full bg-off-white border border-slate-200 rounded-2xl px-6 py-5 focus:ring-2 focus:ring-gold-main outline-none text-blue-deep">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest ml-4">E-mail Corporativo</label>
+                                <input type="email" id="input_email" required placeholder="nome@sefaz.to.gov.br" class="w-full bg-off-white border border-slate-200 rounded-2xl px-6 py-5 focus:ring-2 focus:ring-gold-main outline-none text-blue-deep">
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-8 font-bold text-blue-deep">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest ml-4">Diretoria / Setor</label>
+                                <input type="text" id="input_area" required placeholder="Ex: Tesouro Estadual" class="w-full bg-off-white border border-slate-200 rounded-2xl px-6 py-5 focus:ring-2 focus:ring-gold-main outline-none text-blue-deep">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest ml-4">WhatsApp</label>
+                                <input type="tel" id="input_tel" required placeholder="(63) 9 0000-0000" class="w-full bg-off-white border border-slate-200 rounded-2xl px-6 py-5 focus:ring-2 focus:ring-gold-main outline-none text-blue-deep">
+                            </div>
+                        </div>
+                        <div class="pt-6">
+                            <button type="submit" id="submitBtn" class="w-full btn-gold py-6 rounded-[2rem] font-black text-lg uppercase tracking-widest shadow-2xl flex justify-center items-center">
+                                <span id="btnText">Confirmar Solicitação de Vaga</span>
+                                <div id="btnLoader" class="w-6 h-6 border-4 border-blue-deep/30 border-t-blue-deep rounded-full animate-spin hidden ml-4"></div>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Rodapé Padrão Yoshida Eventos (Fundo Azul Profundo #0F1C2E) -->
+    <footer class="bg-footer-yoshida py-20 relative z-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-16 items-start text-center md:text-left">
+                <!-- Coluna 1: Branding -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-6 justify-center md:justify-start">
+                        <img src="images/logo_saber_digital.png" alt="Instituto Saber Digital" class="h-12 brightness-0 invert object-contain">
+                        <div class="h-8 w-[1px] bg-white/20 ml-2"></div>
+                        <div class="flex flex-col text-left">
+                            <span class="text-[10px] font-black uppercase tracking-[0.3em] leading-none mb-1 text-gold-main">Instituto</span>
+                            <span class="text-2xl font-black tracking-tighter uppercase leading-none italic text-white-solid">SaberDigital</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed mb-8 italic text-white-solid">
+                        Excelência em capacitação estratégica para o setor público, unindo inovação tecnológica e conformidade fiscal.
+                    </p>
+                    <div class="flex space-x-6 justify-center md:justify-start text-xl text-slate-400">
+                        <a href="https://www.instagram.com/institutosaberdigital/" target="_blank" class="hover:text-gold-main transition text-white-solid"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=100093337805540" target="_blank" class="hover:text-gold-main transition text-white-solid"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="https://www.linkedin.com/company/instituto-saber-digital/" target="_blank" class="hover:text-gold-main transition text-white-solid"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Atendimento -->
+                <div class="flex flex-col items-center">
+                    <h4 class="text-gold-main font-black uppercase text-xs tracking-widest mb-10 text-white-solid">Atendimento Especializado</h4>
+                    <div class="space-y-8 text-center w-full">
+                        <div class="inline-flex items-center space-x-4 bg-white/5 px-8 py-4 rounded-full border border-white/10">
+                            <i class="fa-brands fa-whatsapp text-emerald-500 text-2xl"></i>
+                            <span class="font-black uppercase text-xs tracking-widest text-white-solid">(63) 98120-2076</span>
+                        </div>
+                        <div class="pt-4">
+                            <p class="text-[10px] text-slate-500 font-bold uppercase mb-1 text-gold-main">E-mail Corporativo</p>
+                            <a href="mailto:contato@institutosaberdigital.com.br" class="text-xs text-white-solid hover:text-gold-main transition underline decoration-gold-main/30">contato@institutosaberdigital.com.br</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna 3: Suporte ao Aluno -->
+                <div class="text-center md:text-right">
+                    <h4 class="text-gold-main font-black uppercase text-xs tracking-widest mb-10 text-white-solid text-right uppercase">Suporte ao Aluno</h4>
+                    <div class="flex flex-col md:items-end space-y-8">
+                        <div class="flex flex-col md:items-end">
+                            <span class="text-white-solid font-black italic uppercase text-lg leading-tight">Prof. Me. Benedito Palheta</span>
+                            <span class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">CIÊNCIA DE DADOS & IA</span>
+                        </div>
+                        <div class="pt-8 border-t border-white/10 w-full md:w-fit flex justify-center md:justify-end gap-6">
+                            <img src="images/logo_saber_digital.png" alt="Saber Digital" class="h-6 opacity-30 grayscale brightness-200">
+                        </div>
+                        <div class="text-[10px] text-slate-600 font-bold uppercase tracking-widest text-white-solid">
+                            <p>INSTITUTO SABER DIGITAL</p>
+                            <p><a href="https://institutosaberdigital.com.br/" target="_blank" class="text-white-solid hover:text-gold-main">WWW.INSTITUTOSABERDIGITAL.COM.BR</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-20 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] text-center md:text-left gap-6">
+                <p class="text-white-solid">&copy; 2026 INSTITUTO SABER DIGITAL. TODOS OS DIREITOS RESERVADOS.</p>
+                <p class="text-white-solid">CNPJ 36.525.336/0001-15</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Cronômetro 15 Minutos
+        let timeLeft = 15 * 60; 
+        const hDisp = document.getElementById('h-unit'), mDisp = document.getElementById('m-unit'), sDisp = document.getElementById('s-unit');
+        setInterval(() => {
+            if (timeLeft <= 0) return;
+            timeLeft--;
+            hDisp.textContent = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
+            mDisp.textContent = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
+            sDisp.textContent = String(timeLeft % 60).padStart(2, '0');
+        }, 1000);
+
+        let firebaseConfig;
+        try { firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}'); } catch (e) {}
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'formacao-ia-tesouro';
+        let db, auth;
+        if (firebaseConfig && firebaseConfig.apiKey) {
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app); db = getFirestore(app); signInAnonymously(auth);
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn'), btnText = document.getElementById('btnText'), btnLoader = document.getElementById('btnLoader');
+            btn.disabled = true; btnText.classList.add('hidden'); btnLoader.classList.remove('hidden');
+            const data = { name: document.getElementById('input_name').value.trim(), email: document.getElementById('input_email').value.trim(), area: document.getElementById('input_area').value.trim(), tel: document.getElementById('input_tel').value.trim(), createdAt: serverTimestamp() };
+            try {
+                if (db && auth.currentUser) { const col = collection(db, 'artifacts', appId, 'public', 'data', 'registrations'); await addDoc(col, { ...data, userId: auth.currentUser.uid }); } else { await new Promise(r => setTimeout(r, 1500)); }
+                document.getElementById('form-container').innerHTML = `<div class="text-center py-20 text-blue-deep"><div class="w-32 h-32 bg-gold-main/10 text-gold-main rounded-full flex items-center justify-center mx-auto mb-10 text-6xl shadow-inner border border-gold-main/20"><i class="fa-solid fa-check"></i></div><h3 class="text-4xl font-black mb-4 tracking-tighter uppercase italic text-blue-deep leading-tight">Reserva Confirmada!</h3><p class="text-slate-500 mb-12 leading-relaxed max-w-sm mx-auto font-medium text-sm">Sua solicitação foi enviada com sucesso ao Instituto Saber Digital.</p><button onclick="window.location.reload()" class="bg-blue-deep text-white px-14 py-4 rounded-3xl font-black uppercase tracking-widest shadow-2xl hover:bg-blue-dark transition border border-gold-main/30">Concluir</button></div>`;
+            } catch (err) { alert("Erro ao processar. Tente novamente."); btn.disabled = false; btnText.classList.remove('hidden'); btnLoader.classList.add('hidden'); }
+        });
+    </script>
+</body>
+</html>
