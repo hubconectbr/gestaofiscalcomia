@@ -18,6 +18,7 @@
             --brand-green-hover: #15803d;
             --urgency-red: #dc2626;
             --bg-light: #ffffff;
+            --text-gray: #4A4A4A;
         }
 
         body { 
@@ -28,7 +29,7 @@
             padding: 0;
         }
 
-        /* Barra de Cronômetro */
+        /* Barra de Cronômetro Fixa */
         .timer-bar {
             background-color: var(--brand-blue);
             color: #ffffff;
@@ -36,7 +37,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 11px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -47,15 +48,23 @@
             border-bottom: 2px solid var(--gold-main);
         }
 
+        @media (min-width: 640px) {
+            .timer-bar { font-size: 14px; }
+        }
+
         .timer-unit {
             background: #ffffff;
             color: var(--brand-blue);
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
-            margin: 0 4px;
+            margin: 0 2px;
             font-family: monospace;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 900;
+        }
+
+        @media (min-width: 640px) {
+            .timer-unit { font-size: 18px; padding: 2px 8px; margin: 0 4px; }
         }
 
         /* Header Flutuante */
@@ -68,7 +77,7 @@
             z-index: 120;
         }
 
-        /* Banner Hero */
+        /* Banner Hero Responsivo */
         .hero-section {
             position: relative;
             width: 100%;
@@ -81,18 +90,33 @@
             background-color: var(--brand-blue);
         }
 
-        .hero-background-fixed {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('images/banner_principal_sefaz_ia.png');
-            background-attachment: fixed;
-            background-position: top center;
-            background-repeat: no-repeat;
-            background-size: contain; 
-            z-index: 1;
+        /* Desktop: Mantém o banner original */
+        @media (min-width: 1024px) {
+            .hero-background-fixed {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: url('images/banner_principal_sefaz_ia.png');
+                background-attachment: fixed;
+                background-position: top center;
+                background-repeat: no-repeat;
+                background-size: contain; 
+                z-index: 1;
+            }
+            .hero-mobile-content { display: none; }
+        }
+
+        /* Mobile: Novo layout baseado em texto (image_66f11d.png) */
+        @media (max-width: 1023px) {
+            .hero-section {
+                background-color: #D4AF37; /* Cor ocre do novo padrão */
+                min-height: auto;
+                padding: 60px 0;
+            }
+            .hero-background-fixed { display: none; }
+            .hero-mobile-content { display: block; z-index: 2; }
         }
 
         /* Botões */
@@ -117,22 +141,20 @@
             border: 1px solid rgba(0, 22, 51, 0.1);
             transition: all 0.3s ease;
         }
-        .dominance-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--gold-main);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-        }
 
         /* Aplicações Cards */
         .app-card {
             background: #ffffff;
             border-radius: 1.5rem;
-            padding: 1.5rem 2.5rem;
+            padding: 1.2rem 1.5rem;
             display: flex;
             align-items: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border: 1px solid rgba(0,0,0,0.03);
             transition: all 0.3s ease;
+        }
+        @media (min-width: 768px) {
+            .app-card { padding: 1.5rem 2.5rem; }
         }
         .app-card:hover {
             transform: translateX(10px);
@@ -156,6 +178,7 @@
             z-index: 10;
         }
 
+        /* Texto Chapado */
         h1, h2, h3, h4, p, span, li, a {
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
@@ -163,12 +186,23 @@
         }
         .text-white-solid { color: #ffffff !important; }
 
-        /* Animação Fade In */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Estilos Analíticos (image_66f11d.png) */
+        .analytics-box {
+            background: #001633;
+            border-radius: 2rem;
+            padding: 2rem;
+            color: white;
+            border: 1px solid rgba(212, 175, 55, 0.3);
         }
-        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .analytics-item {
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -203,16 +237,48 @@
                 <a href="#aprendizado" class="hover:text-gold-main transition">Domínio</a>
                 <a href="#especialista" class="hover:text-gold-main transition">Especialista</a>
             </div>
-            <a href="#inscricao" class="btn-reserve-green px-10 py-3 rounded-full font-bold text-sm shadow-lg uppercase tracking-wider">
+            <a href="#inscricao" class="btn-reserve-green px-6 sm:px-10 py-3 rounded-full font-bold text-xs sm:text-sm shadow-lg uppercase tracking-wider">
                 Reservar Vaga
             </a>
         </div>
     </nav>
 
-    <!-- Seção Hero -->
+    <!-- Seção Hero (Adaptada) -->
     <section class="hero-section">
         <div class="hero-background-fixed"></div>
-        <div class="max-w-7xl mx-auto px-6 relative z-10 text-center w-full">
+        
+        <!-- Conteúdo Mobile (Estilo image_66f11d.png) -->
+        <div class="hero-mobile-content px-6 w-full text-left">
+            <div class="max-w-xl">
+                <span class="bg-brand-blue text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-6 inline-block">EXCELÊNCIA EM GESTÃO PÚBLICA</span>
+                <h1 class="text-5xl font-black text-brand-blue mb-4 tracking-tighter leading-[0.9]">
+                    IA aplicada ao <br>
+                    <span class="text-white">Equilíbrio Fiscal</span>
+                </h1>
+                <p class="text-brand-blue font-medium text-lg leading-snug mb-10">
+                    A formação definitiva em Inteligência Artificial para o Tesouro Estadual. Otimização de Arrecadação e Gestão de Conta Única.
+                </p>
+                <a href="#inscricao" class="bg-brand-blue text-white px-10 py-5 rounded-2xl font-black text-lg uppercase tracking-widest shadow-2xl inline-block mb-12">
+                    Solicitar Reserva de Vaga
+                </a>
+
+                <!-- Analytics Preview no Mobile -->
+                <div class="analytics-box">
+                    <span class="text-gold-main font-black text-[10px] tracking-widest mb-6 block uppercase">High Performance Analytics</span>
+                    <div class="analytics-item">
+                        <span class="text-[10px] font-bold uppercase">Arrecadação Inteligente</span>
+                        <span class="text-gold-main font-black">94%</span>
+                    </div>
+                    <div class="analytics-item">
+                        <span class="text-[10px] font-bold uppercase">Controle de Liquidez</span>
+                        <span class="text-gold-main font-black">88%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conteúdo Desktop (Original) -->
+        <div class="hidden lg:block max-w-7xl mx-auto px-6 relative z-10 text-center w-full">
             <div class="pt-[50vh] md:pt-[60vh]">
                 <a href="#inscricao" class="btn-reserve-green px-14 py-6 rounded-2xl font-black text-2xl uppercase tracking-widest shadow-2xl inline-block hover:scale-105 transition-transform border-b-4 border-green-900">
                     GARANTIR INSCRIÇÃO AGORA
@@ -225,96 +291,90 @@
         <!-- Turmas e Calendário -->
         <section id="turmas" class="py-24 bg-white border-b border-slate-100">
             <div class="max-w-7xl mx-auto px-6 text-center">
-                <h2 class="text-3xl lg:text-4xl font-black mb-4 uppercase tracking-tighter italic text-brand-blue">Turmas e Datas</h2>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 uppercase tracking-tighter italic text-brand-blue">Turmas e Datas</h2>
                 <div class="h-1.5 w-20 bg-gold-main mx-auto rounded-full mb-16 shadow-sm"></div>
                 <div class="grid lg:grid-cols-2 gap-12 text-left">
-                    <div class="p-10 rounded-[2.5rem] border-2 border-gold-main bg-white shadow-xl relative overflow-hidden">
-                        <span class="bg-brand-blue text-gold-main px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest mb-6 inline-block">Turma 01 - Maio</span>
+                    <div class="p-8 sm:p-10 rounded-[2.5rem] border-2 border-gold-main bg-white shadow-xl relative overflow-hidden">
+                        <span class="bg-brand-blue text-gold-main px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-6 inline-block">Turma 01 - Maio</span>
                         <div class="space-y-4 mb-10 text-brand-blue">
                             <p class="text-sm"><strong>28/05</strong>: 08h às 12h (Online)</p>
                             <p class="text-sm"><strong>29 e 30/05</strong>: 08h às 18h (Presencial)</p>
                         </div>
-                        <a href="#inscricao" class="w-full btn-reserve-green block py-5 rounded-2xl text-center font-black uppercase tracking-widest">Inscrever-se Turma 1</a>
+                        <a href="#inscricao" class="w-full btn-reserve-green block py-5 rounded-2xl text-center font-black text-sm sm:text-base uppercase tracking-widest">Inscrever-se Turma 1</a>
                     </div>
-                    <div class="p-10 rounded-[2.5rem] border-2 border-brand-blue bg-white shadow-xl relative overflow-hidden">
-                        <span class="bg-brand-blue text-gold-main px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest mb-6 inline-block">Turma 02 - Junho</span>
+                    <div class="p-8 sm:p-10 rounded-[2.5rem] border-2 border-brand-blue bg-white shadow-xl relative overflow-hidden">
+                        <span class="bg-brand-blue text-gold-main px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-6 inline-block">Turma 02 - Junho</span>
                         <div class="space-y-4 mb-10 text-brand-blue">
                             <p class="text-sm"><strong>28/05</strong>: 08h às 12h (Online Conjunto)</p>
                             <p class="text-sm"><strong>11 e 12/06</strong>: 08h às 18h (Presencial)</p>
                         </div>
-                        <a href="#inscricao" class="w-full btn-reserve-green block py-5 rounded-2xl text-center font-black uppercase tracking-widest">Inscrever-se Turma 2</a>
+                        <a href="#inscricao" class="w-full btn-reserve-green block py-5 rounded-2xl text-center font-black text-sm sm:text-base uppercase tracking-widest">Inscrever-se Turma 2</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- NOVA SEÇÃO: Aplicações no Dia a Dia e Benefícios -->
+        <!-- Seção: Aplicações no Dia a Dia (Responsividade Ajustada) -->
         <section id="aplicacoes" class="py-24 bg-slate-50/50">
             <div class="max-w-7xl mx-auto px-6">
-                <div class="grid lg:grid-cols-2 gap-16 items-start">
-                    <!-- Esquerda: Aplicações -->
+                <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
                     <div>
-                        <h2 class="text-4xl font-black mb-12 tracking-tighter uppercase italic text-brand-blue leading-tight">
+                        <h2 class="text-2xl sm:text-4xl font-black mb-10 tracking-tighter uppercase italic text-brand-blue leading-tight">
                             APLICAÇÕES NO <br><span class="text-gold-main">DIA A DIA</span>
                         </h2>
-                        <div class="space-y-5">
+                        <div class="space-y-4">
                             <div class="app-card">
-                                <span class="text-gold-main font-black text-2xl mr-8">A</span>
-                                <span class="font-bold text-lg">Pareceres Técnicos ágeis</span>
+                                <span class="text-gold-main font-black text-xl sm:text-2xl mr-4 sm:mr-8">A</span>
+                                <span class="font-bold text-sm sm:text-lg">Pareceres Técnicos ágeis</span>
                             </div>
                             <div class="app-card">
-                                <span class="text-gold-main font-black text-2xl mr-8">B</span>
-                                <span class="font-bold text-lg">Resumo de Processos Judiciais</span>
+                                <span class="text-gold-main font-black text-xl sm:text-2xl mr-4 sm:mr-8">B</span>
+                                <span class="font-bold text-sm sm:text-lg">Resumo de Processos Judiciais</span>
                             </div>
                             <div class="app-card">
-                                <span class="text-gold-main font-black text-2xl mr-8">C</span>
-                                <span class="font-bold text-lg">Análise de Conformidade Fiscal</span>
+                                <span class="text-gold-main font-black text-xl sm:text-2xl mr-4 sm:mr-8">C</span>
+                                <span class="font-bold text-sm sm:text-lg">Análise de Conformidade Fiscal</span>
                             </div>
                             <div class="app-card">
-                                <span class="text-gold-main font-black text-2xl mr-8">D</span>
-                                <span class="font-bold text-lg">Apoio à Programação Financeira</span>
+                                <span class="text-gold-main font-black text-xl sm:text-2xl mr-4 sm:mr-8">D</span>
+                                <span class="font-bold text-sm sm:text-lg">Apoio à Programação Financeira</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Direita: Benefícios Estratégicos -->
-                    <div class="bg-white p-12 rounded-[3.5rem] shadow-2xl border border-slate-100 relative">
+                    <div class="bg-white p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[3.5rem] shadow-2xl border border-slate-100 relative">
                         <div class="absolute top-10 left-10 w-1 h-12 bg-gold-main rounded-full hidden md:block"></div>
-                        <h3 class="text-2xl font-black mb-12 tracking-tighter uppercase text-brand-blue md:pl-6">
+                        <h3 class="text-xl sm:text-2xl font-black mb-10 tracking-tighter uppercase text-brand-blue md:pl-6">
                             BENEFÍCIOS ESTRATÉGICOS
                         </h3>
-                        <div class="grid sm:grid-cols-2 gap-x-8 gap-y-12">
-                            <!-- Produtividade -->
-                            <div class="flex flex-col gap-3">
+                        <div class="grid sm:grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-10">
+                            <div class="flex flex-col gap-2">
                                 <div class="flex items-center gap-3">
-                                    <i class="fa-solid fa-check-double text-gold-main text-xl"></i>
-                                    <h4 class="font-black text-xs uppercase tracking-widest">PRODUTIVIDADE</h4>
+                                    <i class="fa-solid fa-check-double text-gold-main text-lg"></i>
+                                    <h4 class="font-black text-[10px] uppercase tracking-widest">PRODUTIVIDADE</h4>
                                 </div>
-                                <p class="text-sm text-slate-500 font-medium leading-relaxed">Mais eficiência nas rotinas e tarefas repetitivas.</p>
+                                <p class="text-xs sm:text-sm text-slate-500 font-medium">Mais eficiência nas rotinas e tarefas repetitivas.</p>
                             </div>
-                            <!-- Qualidade -->
-                            <div class="flex flex-col gap-3">
+                            <div class="flex flex-col gap-2">
                                 <div class="flex items-center gap-3">
-                                    <i class="fa-solid fa-check-double text-gold-main text-xl"></i>
-                                    <h4 class="font-black text-xs uppercase tracking-widest">QUALIDADE</h4>
+                                    <i class="fa-solid fa-check-double text-gold-main text-lg"></i>
+                                    <h4 class="font-black text-[10px] uppercase tracking-widest">QUALIDADE</h4>
                                 </div>
-                                <p class="text-sm text-slate-500 font-medium leading-relaxed">Maior profundidade e precisão técnica nas análises.</p>
+                                <p class="text-xs sm:text-sm text-slate-500 font-medium">Maior profundidade e precisão técnica nas análises.</p>
                             </div>
-                            <!-- Rapidez -->
-                            <div class="flex flex-col gap-3">
+                            <div class="flex flex-col gap-2">
                                 <div class="flex items-center gap-3">
-                                    <i class="fa-solid fa-check-double text-gold-main text-xl"></i>
-                                    <h4 class="font-black text-xs uppercase tracking-widest">RAPIDEZ</h4>
+                                    <i class="fa-solid fa-check-double text-gold-main text-lg"></i>
+                                    <h4 class="font-black text-[10px] uppercase tracking-widest">RAPIDEZ</h4>
                                 </div>
-                                <p class="text-sm text-slate-500 font-medium leading-relaxed">Identificação instantânea de inconsistências.</p>
+                                <p class="text-xs sm:text-sm text-slate-500 font-medium">Identificação instantânea de inconsistências.</p>
                             </div>
-                            <!-- Decisão -->
-                            <div class="flex flex-col gap-3">
+                            <div class="flex flex-col gap-2">
                                 <div class="flex items-center gap-3">
-                                    <i class="fa-solid fa-check-double text-gold-main text-xl"></i>
-                                    <h4 class="font-black text-xs uppercase tracking-widest">DECISÃO</h4>
+                                    <i class="fa-solid fa-check-double text-gold-main text-lg"></i>
+                                    <h4 class="font-black text-[10px] uppercase tracking-widest">DECISÃO</h4>
                                 </div>
-                                <p class="text-sm text-slate-500 font-medium leading-relaxed">Apoio em tempo real para decisões estratégicas.</p>
+                                <p class="text-xs sm:text-sm text-slate-500 font-medium">Apoio em tempo real para decisões estratégicas.</p>
                             </div>
                         </div>
                     </div>
@@ -326,37 +386,23 @@
         <section id="metodologia" class="py-24 section-blue-institucional">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center mb-16">
-                    <h2 class="text-3xl lg:text-4xl font-black mb-4 uppercase tracking-tighter">Métodos e Estratégias</h2>
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 uppercase tracking-tighter">Métodos e Estratégias</h2>
                     <div class="h-1 w-20 bg-gold-main mx-auto mb-4"></div>
                 </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-10 text-left">
-                    <div class="p-8 bg-white/5 rounded-3xl border-t-4 border-gold-main backdrop-blur-sm">
+                <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8 sm:gap-10 text-left">
+                    <div class="p-6 sm:p-8 bg-white/5 rounded-3xl border-t-4 border-gold-main backdrop-blur-sm">
                         <div class="flex items-center space-x-3 mb-4">
-                            <div class="w-8 h-8 bg-gold-main rounded-full flex items-center justify-center text-brand-blue"><i class="fa-solid fa-chevron-right text-xs"></i></div>
-                            <h4 class="text-white-solid font-black uppercase text-[12px] tracking-widest">Introdução à IA Generativa</h4>
+                            <div class="w-6 sm:w-8 h-6 sm:h-8 bg-gold-main rounded-full flex items-center justify-center text-brand-blue"><i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+                            <h4 class="text-white-solid font-black uppercase text-[10px] sm:text-[12px] tracking-widest">Introdução à IA Generativa</h4>
                         </div>
-                        <p class="text-sm text-slate-300 leading-relaxed font-medium">Palestra detalhando o ecossistema Google Gemini e NotebookLM aplicados à gestão fazendária.</p>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">Palestra detalhando o ecossistema Google Gemini e NotebookLM aplicados à gestão fazendária e financeira.</p>
                     </div>
-                    <div class="p-8 bg-white/5 rounded-3xl border-t-4 border-gold-main backdrop-blur-sm">
+                    <div class="p-6 sm:p-8 bg-white/5 rounded-3xl border-t-4 border-gold-main backdrop-blur-sm">
                         <div class="flex items-center space-x-3 mb-4">
-                            <div class="w-8 h-8 bg-gold-main rounded-full flex items-center justify-center text-brand-blue"><i class="fa-solid fa-chevron-right text-xs"></i></div>
-                            <h4 class="text-white-solid font-black uppercase text-[12px] tracking-widest">Transparência e Comunicação</h4>
+                            <div class="w-6 sm:w-8 h-6 sm:h-8 bg-gold-main rounded-full flex items-center justify-center text-brand-blue"><i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+                            <h4 class="text-white-solid font-black uppercase text-[10px] sm:text-[12px] tracking-widest">Transparência e Comunicação</h4>
                         </div>
-                        <p class="text-sm text-slate-300 leading-relaxed font-medium">Uso da IA para redação de notas explicativas e tradução de normas complexas para linguagem clara.</p>
-                    </div>
-                    <div class="p-8 bg-white/5 rounded-3xl border-t-4 border-gold-main backdrop-blur-sm">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <div class="w-8 h-8 bg-gold-main rounded-full flex items-center justify-center text-brand-blue"><i class="fa-solid fa-chevron-right text-xs"></i></div>
-                            <h4 class="text-white-solid font-black uppercase text-[12px] tracking-widest">Aplicações na Gestão</h4>
-                        </div>
-                        <p class="text-sm text-slate-300 leading-relaxed font-medium">Demonstração prática: elaboração de pareceres técnicos, resumos de processos e conformidade fiscal.</p>
-                    </div>
-                    <div class="p-8 bg-white/5 rounded-3xl border-t-4 border-gold-main backdrop-blur-sm">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <div class="w-8 h-8 bg-gold-main rounded-full flex items-center justify-center text-brand-blue"><i class="fa-solid fa-chevron-right text-xs"></i></div>
-                            <h4 class="text-white-solid font-black uppercase text-[12px] tracking-widest">Ética e Segurança</h4>
-                        </div>
-                        <p class="text-sm text-slate-300 leading-relaxed font-medium">Foco na validação humana e proteção de dados sensíveis para garantir a integridade total do erário.</p>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">Uso da IA para redação de notas explicativas e tradução de normas complexas para linguagem clara e acessível.</p>
                     </div>
                 </div>
             </div>
@@ -365,27 +411,27 @@
         <!-- O que você vai dominar -->
         <section id="aprendizado" class="py-24 bg-white">
             <div class="max-w-7xl mx-auto px-6 text-center">
-                <h2 class="text-3xl lg:text-5xl font-black mb-6 uppercase tracking-tighter text-brand-blue">O que você vai dominar</h2>
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
-                    <div class="dominance-card p-10 rounded-[2.5rem] flex flex-col items-center text-center shadow-sm">
-                        <i class="fa-solid fa-microchip text-gold-main text-4xl mb-6"></i>
-                        <h4 class="font-black uppercase text-xs mb-4 border-b-2 border-gold-main pb-1 text-brand-blue">IA na Prática</h4>
-                        <p class="text-sm text-brand-blue font-medium">Google Gemini e NotebookLM em demandas reais.</p>
+                <h2 class="text-2xl sm:text-3xl lg:text-5xl font-black mb-6 uppercase tracking-tighter text-brand-blue">O que você vai dominar</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-16">
+                    <div class="dominance-card p-8 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] flex flex-col items-center text-center shadow-sm">
+                        <i class="fa-solid fa-microchip text-gold-main text-3xl sm:text-4xl mb-6"></i>
+                        <h4 class="font-black uppercase text-[10px] sm:text-xs mb-4 border-b-2 border-gold-main pb-1 text-brand-blue">IA na Prática</h4>
+                        <p class="text-xs sm:text-sm text-brand-blue font-medium">Google Gemini e NotebookLM em demandas reais.</p>
                     </div>
-                    <div class="dominance-card p-10 rounded-[2.5rem] flex flex-col items-center text-center shadow-sm">
-                        <i class="fa-solid fa-file-signature text-gold-main text-4xl mb-6"></i>
-                        <h4 class="font-black uppercase text-xs mb-4 border-b-2 border-gold-main pb-1 text-brand-blue">Redação Técnica</h4>
-                        <p class="text-sm text-brand-blue font-medium">Pareceres com precisão e agilidade absoluta.</p>
+                    <div class="dominance-card p-8 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] flex flex-col items-center text-center shadow-sm">
+                        <i class="fa-solid fa-file-signature text-gold-main text-3xl sm:text-4xl mb-6"></i>
+                        <h4 class="font-black uppercase text-[10px] sm:text-xs mb-4 border-b-2 border-gold-main pb-1 text-brand-blue">Redação Técnica</h4>
+                        <p class="text-xs sm:text-sm text-brand-blue font-medium">Pareceres com precisão e agilidade absoluta.</p>
                     </div>
-                    <div class="dominance-card p-10 rounded-[2.5rem] flex flex-col items-center text-center shadow-sm">
-                        <i class="fa-solid fa-bolt-lightning text-gold-main text-4xl mb-6"></i>
-                        <h4 class="font-black uppercase text-xs mb-4 border-b-2 border-gold-main pb-1 text-brand-blue">Automação</h4>
-                        <p class="text-sm text-brand-blue font-medium">Eliminação de rotinas repetitivas.</p>
+                    <div class="dominance-card p-8 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] flex flex-col items-center text-center shadow-sm">
+                        <i class="fa-solid fa-bolt-lightning text-gold-main text-3xl sm:text-4xl mb-6"></i>
+                        <h4 class="font-black uppercase text-[10px] sm:text-xs mb-4 border-b-2 border-gold-main pb-1 text-brand-blue">Automação</h4>
+                        <p class="text-xs sm:text-sm text-brand-blue font-medium">Eliminação de rotinas repetitivas.</p>
                     </div>
-                    <div class="dominance-card p-10 rounded-[2.5rem] flex flex-col items-center text-center shadow-sm">
-                        <i class="fa-solid fa-chart-line text-gold-main text-4xl mb-6"></i>
-                        <h4 class="font-black uppercase text-xs mb-4 border-b-2 border-gold-main pb-1 text-brand-blue">Data Insights</h4>
-                        <p class="text-sm text-brand-blue font-medium">Inteligência sobre dados financeiros complexos.</p>
+                    <div class="dominance-card p-8 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] flex flex-col items-center text-center shadow-sm">
+                        <i class="fa-solid fa-chart-line text-gold-main text-3xl sm:text-4xl mb-6"></i>
+                        <h4 class="font-black uppercase text-[10px] sm:text-xs mb-4 border-b-2 border-gold-main pb-1 text-brand-blue">Data Insights</h4>
+                        <p class="text-xs sm:text-sm text-brand-blue font-medium">Inteligência sobre dados financeiros complexos.</p>
                     </div>
                 </div>
             </div>
@@ -393,19 +439,19 @@
 
         <!-- Especialista -->
         <section id="especialista" class="py-24 section-blue-institucional">
-            <div class="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center gap-16">
+            <div class="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
                 <div class="lg:w-2/5">
-                    <img src="images/Benedito_Palheta_2026.jpg" alt="Prof. Me. Benedito Palheta" class="rounded-2xl shadow-2xl w-full border-4 border-white object-cover aspect-[4/5] grayscale hover:grayscale-0 transition duration-1000">
+                    <img src="images/Benedito_Palheta_2026.jpg" alt="Prof. Me. Benedito Palheta" class="rounded-2xl shadow-2xl w-full max-w-sm border-4 border-white object-cover aspect-[4/5] grayscale hover:grayscale-0 transition duration-1000 mx-auto">
                 </div>
                 <div class="lg:w-3/5 text-center lg:text-left">
                     <span class="text-gold-main font-bold uppercase tracking-[0.4em] text-[10px] mb-4 block">Condução Técnica Especializada</span>
-                    <h2 class="text-2xl font-black text-white-solid mb-2 uppercase tracking-tight italic">Prof. Me. Benedito Palheta dos Santos</h2>
-                    <p class="text-gold-main font-bold text-xs uppercase tracking-widest mb-10 italic">Especialista em Inteligência Artificial</p>
-                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
-                        <div class="credential-tag">Inteligência Artificial</div>
-                        <div class="credential-tag">Cibersegurança</div>
-                        <div class="credential-tag">Ciência de Dados</div>
-                        <div class="credential-tag">Proteção de Dados</div>
+                    <h2 class="text-xl sm:text-2xl font-black text-white-solid mb-2 uppercase tracking-tight italic">Prof. Me. Benedito Palheta dos Santos</h2>
+                    <p class="text-gold-main font-bold text-xs uppercase tracking-widest mb-8 italic">Especialista em Inteligência Artificial</p>
+                    <div class="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
+                        <div class="credential-tag text-[9px] sm:text-[11px]">Inteligência Artificial</div>
+                        <div class="credential-tag text-[9px] sm:text-[11px]">Cibersegurança</div>
+                        <div class="credential-tag text-[9px] sm:text-[11px]">Ciência de Dados</div>
+                        <div class="credential-tag text-[9px] sm:text-[11px]">Proteção de Dados</div>
                     </div>
                 </div>
             </div>
@@ -414,37 +460,37 @@
         <!-- Formulário de Reserva -->
         <section id="inscricao" class="py-24 bg-white">
             <div class="max-w-4xl mx-auto px-6 text-center">
-                <h2 class="text-4xl font-black mb-14 tracking-tighter uppercase italic text-brand-blue leading-tight">Solicitar Reserva de Vaga</h2>
-                <div id="form-container" class="bg-white p-10 md:p-14 rounded-[3.5rem] shadow-2xl text-left border border-brand-blue/10 border-t-[10px] border-t-gold-main">
+                <h2 class="text-3xl sm:text-4xl font-black mb-10 sm:mb-14 tracking-tighter uppercase italic text-brand-blue leading-tight">Solicitar Reserva de Vaga</h2>
+                <div id="form-container" class="bg-white p-8 sm:p-14 rounded-[2.5rem] sm:rounded-[3.5rem] shadow-2xl text-left border border-brand-blue/10 border-t-[10px] border-t-gold-main">
                     
                     <iframe name="google_submit_iframe" id="google_submit_iframe" style="display:none;"></iframe>
 
-                    <form id="registrationForm" class="space-y-8">
-                        <div class="grid md:grid-cols-2 gap-8 font-bold text-brand-blue">
+                    <form id="registrationForm" class="space-y-6 sm:space-y-8">
+                        <div class="grid md:grid-cols-2 gap-6 sm:gap-8 font-bold text-brand-blue">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black uppercase tracking-widest ml-4">Nome Completo</label>
-                                <input type="text" id="input_name" required placeholder="Digite seu nome completo" class="w-full bg-slate-50 border-none rounded-2xl px-6 py-5 focus:ring-2 focus:ring-green-500 outline-none">
+                                <input type="text" id="input_name" required placeholder="Digite seu nome completo" class="w-full bg-slate-50 border-none rounded-xl sm:rounded-2xl px-6 py-4 sm:py-5 focus:ring-2 focus:ring-green-500 outline-none text-sm sm:text-base">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black uppercase tracking-widest ml-4">Telefone de Contato</label>
-                                <input type="tel" id="input_tel" required placeholder="(00) 0 0000-0000" class="w-full bg-slate-50 border-none rounded-2xl px-6 py-5 focus:ring-2 focus:ring-green-500 outline-none">
+                                <input type="tel" id="input_tel" required placeholder="(00) 0 0000-0000" class="w-full bg-slate-50 border-none rounded-xl sm:rounded-2xl px-6 py-4 sm:py-5 focus:ring-2 focus:ring-green-500 outline-none text-sm sm:text-base">
                             </div>
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-black uppercase tracking-widest ml-4">Email de Contato</label>
-                            <input type="email" id="input_email" required placeholder="seuemail@exemplo.com.br" class="w-full bg-slate-50 border-none rounded-2xl px-6 py-5 focus:ring-2 focus:ring-green-500 outline-none">
+                            <input type="email" id="input_email" required placeholder="seuemail@exemplo.com.br" class="w-full bg-slate-50 border-none rounded-xl sm:rounded-2xl px-6 py-4 sm:py-5 focus:ring-2 focus:ring-green-500 outline-none text-sm sm:text-base">
                         </div>
-                        <div class="grid md:grid-cols-2 gap-8 font-bold text-brand-blue">
+                        <div class="grid md:grid-cols-2 gap-6 sm:gap-8 font-bold text-brand-blue">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black uppercase tracking-widest ml-4">Órgão / Empresa</label>
-                                <input type="text" id="input_organ" required placeholder="Ex: SEFAZ-UF" class="w-full bg-slate-50 border-none rounded-2xl px-6 py-5 focus:ring-2 focus:ring-green-500 outline-none">
+                                <input type="text" id="input_organ" required placeholder="Ex: SEFAZ-TO" class="w-full bg-slate-50 border-none rounded-xl sm:rounded-2xl px-6 py-4 sm:py-5 focus:ring-2 focus:ring-green-500 outline-none text-sm sm:text-base">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black uppercase tracking-widest ml-4">Cargo</label>
-                                <input type="text" id="input_role" required placeholder="Ex: Analista de TI" class="w-full bg-slate-50 border-none rounded-2xl px-6 py-5 focus:ring-2 focus:ring-green-500 outline-none">
+                                <input type="text" id="input_role" required placeholder="Ex: Analista de TI" class="w-full bg-slate-50 border-none rounded-xl sm:rounded-2xl px-6 py-4 sm:py-5 focus:ring-2 focus:ring-green-500 outline-none text-sm sm:text-base">
                             </div>
                         </div>
-                        <button type="submit" id="submitBtn" class="w-full btn-reserve-green py-6 rounded-[2rem] font-black text-lg uppercase tracking-widest shadow-2xl flex justify-center items-center">
+                        <button type="submit" id="submitBtn" class="w-full btn-reserve-green py-5 sm:py-6 rounded-[1.5rem] sm:rounded-[2rem] font-black text-sm sm:text-lg uppercase tracking-widest shadow-2xl flex justify-center items-center">
                             <span id="btnText">Confirmar Reserva de Vaga</span>
                             <div id="btnLoader" class="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin hidden ml-4"></div>
                         </button>
@@ -454,19 +500,19 @@
         </section>
     </div>
 
-    <!-- Rodapé -->
-    <footer class="section-blue-institucional py-20 relative z-50">
+    <!-- Rodapé (Ajuste de Logo Mobile) -->
+    <footer class="section-blue-institucional py-16 sm:py-20 relative z-50">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-3 gap-16 items-start text-center md:text-left">
-                <!-- Coluna 1: Branding -->
+            <div class="grid md:grid-cols-3 gap-12 lg:gap-16 items-start text-center md:text-left">
+                <!-- Coluna 1 -->
                 <div>
                     <div class="flex items-center space-x-3 mb-8 justify-center md:justify-start">
-                        <!-- Removido o filtro brightness/invert agressivo para evitar o efeito "branco" -->
-                        <img src="images/logo_saber_digital.png" alt="Instituto Saber Digital" class="h-12 w-auto object-contain brightness-0 invert">
-                        <div class="h-10 w-[1px] bg-white/20"></div>
+                        <!-- Ajustado para não distorcer no mobile -->
+                        <img src="images/logo_saber_digital.png" alt="Logo Instituto Saber Digital" class="h-10 sm:h-12 w-auto object-contain brightness-0 invert">
+                        <div class="h-8 sm:h-10 w-[1px] bg-white/20"></div>
                         <div class="flex flex-col text-left">
-                            <span class="text-[10px] font-black uppercase text-gold-main tracking-widest">Instituto</span>
-                            <span class="text-2xl font-black italic uppercase leading-none tracking-tighter text-white-solid">SaberDigital</span>
+                            <span class="text-[9px] sm:text-[10px] font-black uppercase text-gold-main tracking-widest">Instituto</span>
+                            <span class="text-xl sm:text-2xl font-black italic uppercase leading-none tracking-tighter text-white-solid">SaberDigital</span>
                         </div>
                     </div>
                     <div class="flex space-x-6 justify-center md:justify-start text-xl">
@@ -475,26 +521,23 @@
                         <a href="https://www.linkedin.com/company/instituto-saber-digital/" target="_blank" class="hover:text-gold-main transition text-white-solid"><i class="fa-brands fa-linkedin"></i></a>
                     </div>
                 </div>
-                <!-- Coluna 2: Atendimento -->
+                <!-- Coluna 2 -->
                 <div class="flex flex-col items-center">
-                    <h4 class="text-gold-main font-black uppercase text-xs tracking-widest mb-10 text-white-solid">Atendimento</h4>
-                    <a href="https://wa.me/5563981202076" target="_blank" class="inline-flex items-center space-x-4 bg-white/5 px-8 py-4 rounded-full border border-white/10 hover:bg-gold-main/20 transition group">
-                        <i class="fa-brands fa-whatsapp text-emerald-500 text-2xl"></i>
-                        <span class="font-black uppercase text-xs tracking-widest text-white-solid">(63) 98120-2076</span>
+                    <h4 class="text-gold-main font-black uppercase text-[10px] sm:text-xs tracking-widest mb-8 sm:mb-10 text-white-solid">Atendimento</h4>
+                    <a href="https://wa.me/5563981202076" target="_blank" class="inline-flex items-center space-x-4 bg-white/5 px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-white/10 hover:bg-gold-main/20 transition group">
+                        <i class="fa-brands fa-whatsapp text-emerald-500 text-xl sm:text-2xl"></i>
+                        <span class="font-black uppercase text-[10px] sm:text-xs tracking-widest text-white-solid">(63) 98120-2076</span>
                     </a>
                 </div>
-                <!-- Coluna 3: Suporte ao Aluno -->
+                <!-- Coluna 3 -->
                 <div class="text-center md:text-right">
-                    <h4 class="text-gold-main font-black uppercase text-xs tracking-widest mb-10 text-white-solid text-right uppercase">Suporte ao Aluno</h4>
+                    <h4 class="text-gold-main font-black uppercase text-[10px] sm:text-xs tracking-widest mb-8 sm:mb-10 text-white-solid text-right uppercase">Suporte ao Aluno</h4>
                     <div class="flex flex-col md:items-end text-white-solid">
-                        <span class="font-black italic uppercase text-lg leading-tight mb-1 text-white-solid">Prof. Me. Benedito Palheta</span>
-                        <img src="images/logo_saber_digital.png" alt="Saber Digital" class="h-6 opacity-30 grayscale brightness-200 mt-6">
-                        <p class="text-[10px] font-bold uppercase tracking-widest mt-4">WWW.INSTITUTOSABERDIGITAL.COM.BR</p>
+                        <span class="font-black italic uppercase text-base sm:text-lg leading-tight mb-1 text-white-solid">Prof. Me. Benedito Palheta</span>
+                        <img src="images/logo_saber_digital.png" alt="Saber Digital" class="h-6 sm:h-8 w-auto object-contain opacity-30 grayscale brightness-200 mt-6 mx-auto md:mr-0">
+                        <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mt-4">WWW.INSTITUTOSABERDIGITAL.COM.BR</p>
                     </div>
                 </div>
-            </div>
-            <div class="mt-20 pt-10 border-t border-white/5 text-center text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em]">
-                <p class="text-white-solid">&copy; 2026 INSTITUTO SABER DIGITAL | CNPJ 36.525.336/0001-15</p>
             </div>
         </div>
     </footer>
@@ -574,22 +617,22 @@
                 
                 const container = document.getElementById('form-container');
                 container.innerHTML = `
-                    <div class="text-center py-20 animate-fade-in">
-                        <div class="w-32 h-32 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-10 text-6xl shadow-inner border border-green-200">
+                    <div class="text-center py-10 sm:py-20 animate-fade-in">
+                        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8 sm:mb-10 text-4xl sm:text-6xl shadow-inner border border-green-200">
                             <i class="fa-solid fa-check"></i>
                         </div>
-                        <h3 class="text-4xl font-black mb-4 tracking-tighter uppercase italic leading-tight text-brand-blue">Reserva Confirmada!</h3>
-                        <p class="text-slate-600 mb-8 leading-relaxed max-w-sm mx-auto font-medium text-sm text-center">
-                            Sua solicitação foi gravada com sucesso no Google Forms e em nosso sistema. Você receberá um e-mail com a confirmação oficial em breve.
+                        <h3 class="text-2xl sm:text-4xl font-black mb-4 tracking-tighter uppercase italic leading-tight text-brand-blue">Reserva Confirmada!</h3>
+                        <p class="text-slate-600 mb-6 leading-relaxed max-w-sm mx-auto font-medium text-xs sm:text-sm text-center px-4">
+                            Sua solicitação foi gravada com sucesso. Você receberá um e-mail com a confirmação oficial em breve.
                         </p>
-                        <p class="text-brand-blue font-bold mb-10 max-w-sm mx-auto text-center">
-                            Acompanhe todas as atualizações e tenha acesso a materiais extras através da nossa comunidade exclusiva:
+                        <p class="text-brand-blue font-bold mb-8 max-w-sm mx-auto text-center px-4">
+                            Acompanhe todas as atualizações e materiais extras através da nossa comunidade:
                         </p>
-                        <div class="flex flex-col gap-4 items-center">
-                            <a href="https://chat.whatsapp.com/Gx911A1zsVeB5EZuyz5im7" target="_blank" class="bg-green-600 text-white px-10 py-5 rounded-3xl font-black uppercase tracking-widest shadow-2xl hover:bg-green-700 transition flex items-center gap-3">
+                        <div class="flex flex-col gap-4 items-center px-4">
+                            <a href="https://chat.whatsapp.com/Gx911A1zsVeB5EZuyz5im7" target="_blank" class="w-full sm:w-auto bg-green-600 text-white px-10 py-5 rounded-3xl font-black uppercase tracking-widest shadow-2xl hover:bg-green-700 transition flex items-center justify-center gap-3">
                                 <i class="fa-brands fa-whatsapp text-2xl"></i> Entrar na Comunidade
                             </a>
-                            <button onclick="window.location.reload()" class="text-slate-400 text-xs font-bold uppercase tracking-widest hover:text-brand-blue transition mt-6">Concluir</button>
+                            <button onclick="window.location.reload()" class="text-slate-400 text-[10px] font-bold uppercase tracking-widest hover:text-brand-blue transition mt-6">Concluir</button>
                         </div>
                     </div>
                 `;
